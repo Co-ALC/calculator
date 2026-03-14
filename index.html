@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="計算機">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <title>計算機</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <div class="calculator">
+      <div class="display">
+        <div class="display-top">
+          <div class="expression" id="expression"></div>
+          <button class="history-toggle" id="historyToggle" title="履歴">&#x1f553;</button>
+        </div>
+        <div class="result" id="result">0</div>
+      </div>
+      <div class="buttons">
+        <button class="btn clear" data-action="clear">C</button>
+        <button class="btn operator" data-action="sign">±</button>
+        <button class="btn operator" data-action="percent">%</button>
+        <button class="btn operator" data-action="operator" data-value="÷">÷</button>
+
+        <button class="btn number" data-action="number" data-value="7">7</button>
+        <button class="btn number" data-action="number" data-value="8">8</button>
+        <button class="btn number" data-action="number" data-value="9">9</button>
+        <button class="btn operator" data-action="operator" data-value="×">×</button>
+
+        <button class="btn number" data-action="number" data-value="4">4</button>
+        <button class="btn number" data-action="number" data-value="5">5</button>
+        <button class="btn number" data-action="number" data-value="6">6</button>
+        <button class="btn operator" data-action="operator" data-value="−">−</button>
+
+        <button class="btn number" data-action="number" data-value="1">1</button>
+        <button class="btn number" data-action="number" data-value="2">2</button>
+        <button class="btn number" data-action="number" data-value="3">3</button>
+        <button class="btn operator" data-action="operator" data-value="+">+</button>
+
+        <button class="btn number zero" data-action="number" data-value="0">0</button>
+        <button class="btn number" data-action="decimal">.</button>
+        <button class="btn equals" data-action="equals">=</button>
+      </div>
+      <div class="currency-bar">
+        <button class="currency-btn" id="toEur">&#xa5; → &#x20ac;</button>
+        <button class="currency-btn" id="toJpy">&#x20ac; → &#xa5;</button>
+        <div class="currency-rate" id="currencyRate">レート取得中...</div>
+      </div>
+    </div>
+
+    <div class="history-panel" id="historyPanel">
+      <div class="history-header">
+        <h3>履歴</h3>
+        <button class="history-clear" id="historyClear">クリア</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">履歴はありません</div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
