@@ -30,6 +30,11 @@ class Calculator {
 
     this.init();
     this.fetchExchangeRate();
+
+    // GitHub Gist連携済みなら起動時に自動取得
+    if (this.githubToken && this.gistId) {
+      this.pullFromGist();
+    }
   }
 
   init() {
@@ -405,15 +410,15 @@ class Calculator {
     if (this.history.length === 0) {
       return; // 履歴がなければ何もしない
     }
+    // GitHub未設定なら先に設定を促す
+    if (!this.githubToken) {
+      this.openGithubModal();
+      return;
+    }
     this.saveModalInfo.textContent = `${this.history.length}件の計算履歴を保存します`;
     this.saveNoteInput.value = '';
-    // GitHub連携状態に応じてメッセージを変える
     const notice = document.getElementById('saveModalNotice');
-    if (this.githubToken) {
-      notice.innerHTML = '&#x2601; 端末 + GitHub Gist に保存されます';
-    } else {
-      notice.innerHTML = '&#x1f512; データは端末内にのみ保存されます';
-    }
+    notice.innerHTML = '&#x2601; GitHub Gist に保存されます';
     this.saveModal.classList.remove('hidden');
     setTimeout(() => this.saveNoteInput.focus(), 100);
   }
@@ -423,6 +428,12 @@ class Calculator {
   }
 
   confirmSave() {
+    if (!this.githubToken) {
+      this.closeSaveModal();
+      this.openGithubModal();
+      return;
+    }
+
     const note = this.saveNoteInput.value.trim() || '無題';
     const session = {
       id: Date.now(),
@@ -433,7 +444,6 @@ class Calculator {
 
     this.savedSessions.unshift(session);
     if (this.savedSessions.length > 20) this.savedSessions.pop();
-    this.saveSavedSessions();
     this.closeSaveModal();
 
     // 保存後、履歴をクリアしてリセット状態にする
@@ -444,30 +454,19 @@ class Calculator {
     // 保存済みタブに切り替えて結果を見せる
     this.switchTab('saved');
 
-    // GitHub Gist にも自動同期
-    if (this.githubToken) {
-      this.pushToGist();
-    }
+    // GitHub Gist に保存（ローカルには保存しない）
+    this.pushToGist();
   }
 
-  // 保存済みセッションの管理
+  // 保存済みセッションの管理（Gistのみ、ローカル保存なし）
   loadSavedSessions() {
-    try {
-      return JSON.parse(localStorage.getItem('calcSavedSessions')) || [];
-    } catch {
-      return [];
-    }
-  }
-
-  saveSavedSessions() {
-    localStorage.setItem('calcSavedSessions', JSON.stringify(this.savedSessions));
+    return []; // ローカルには保存しない
   }
 
   deleteSavedSession(id) {
     this.savedSessions = this.savedSessions.filter(s => s.id !== id);
-    this.saveSavedSessions();
     this.renderSavedSessions();
-    // Gistにも反映
+    // Gistに反映（ローカルには保存しない）
     if (this.githubToken) this.pushToGist();
   }
 
@@ -697,23 +696,11 @@ class Calculator {
 
       const remoteSessions = JSON.parse(file.content);
 
-      // ローカルとリモートをマージ（IDベースで重複排除）
-      const localIds = new Set(this.savedSessions.map(s => s.id));
-      const merged = [...this.savedSessions];
-      for (const session of remoteSessions) {
-        if (!localIds.has(session.id)) {
-          merged.push(session);
-        }
-      }
-      // 日付で降順ソート
-      merged.sort((a, b) => new Date(b.date) - new Date(a.date));
-      // 最大20件
-      this.savedSessions = merged.slice(0, 20);
-      this.saveSavedSessions();
+      // リモートのデータをそのまま使用（ローカル保存なし）
+      const sessions = Array.isArray(remoteSessions) ? remoteSessions : [];
+      sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+      this.savedSessions = sessions.slice(0, 20);
       this.renderSavedSessions();
-
-      // マージ後のデータをGistにも反映
-      await this.pushToGist();
     } catch (err) {
       this.setGithubStatus('取得失敗', 'error');
     }
