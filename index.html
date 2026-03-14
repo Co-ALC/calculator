@@ -55,12 +55,62 @@
     </div>
 
     <div class="history-panel" id="historyPanel">
-      <div class="history-header">
-        <h3>履歴</h3>
-        <button class="history-clear" id="historyClear">クリア</button>
+      <div class="history-tabs">
+        <button class="history-tab active" id="tabHistory" data-tab="history">履歴</button>
+        <button class="history-tab" id="tabSaved" data-tab="saved">保存済み</button>
       </div>
-      <div class="history-list" id="historyList">
-        <div class="history-empty">履歴はありません</div>
+      <div class="history-tab-content" id="tabContentHistory">
+        <div class="history-header">
+          <button class="history-save-btn" id="historySave">&#x1f4be; 保存</button>
+          <button class="history-clear" id="historyClear">クリア</button>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="history-empty">履歴はありません</div>
+        </div>
+      </div>
+      <div class="history-tab-content hidden" id="tabContentSaved">
+        <div class="github-sync-bar">
+          <button class="github-sync-btn" id="githubSyncBtn">&#x2601; 同期</button>
+          <button class="github-settings-btn" id="githubSettingsBtn">&#x2699;</button>
+          <span class="github-status" id="githubStatus"></span>
+        </div>
+        <div class="saved-list" id="savedList">
+          <div class="history-empty">保存データはありません</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 保存モーダル -->
+    <div class="save-modal-overlay hidden" id="saveModal">
+      <div class="save-modal">
+        <h3>履歴を保存</h3>
+        <p class="save-modal-info" id="saveModalInfo"></p>
+        <input type="text" class="save-modal-input" id="saveNote" placeholder="メモを入力（例：買い物の計算）" maxlength="50">
+        <div class="save-modal-actions">
+          <button class="save-modal-btn cancel" id="saveCancelBtn">キャンセル</button>
+          <button class="save-modal-btn confirm" id="saveConfirmBtn">保存する</button>
+        </div>
+        <div class="save-modal-notice" id="saveModalNotice">&#x1f512; データは端末内にのみ保存されます</div>
+      </div>
+    </div>
+
+    <!-- GitHub設定モーダル -->
+    <div class="save-modal-overlay hidden" id="githubModal">
+      <div class="save-modal">
+        <h3>&#x2601; GitHub Gist 連携</h3>
+        <p class="save-modal-info">保存データをGitHub Gistに同期します。<br>トークンは端末内にのみ保存されます。</p>
+        <label class="github-label">Personal Access Token</label>
+        <input type="password" class="save-modal-input" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+        <p class="github-help">
+          <a href="https://github.com/settings/tokens/new?scopes=gist&amp;description=Calculator%20App" target="_blank" rel="noopener">
+            &#x1f517; トークンを作成（gist権限のみ）
+          </a>
+        </p>
+        <div class="github-current-status" id="githubCurrentStatus"></div>
+        <div class="save-modal-actions">
+          <button class="save-modal-btn cancel" id="githubCancelBtn">閉じる</button>
+          <button class="save-modal-btn confirm" id="githubSaveTokenBtn">設定する</button>
+        </div>
       </div>
     </div>
   </div>

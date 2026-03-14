@@ -330,6 +330,389 @@ body {
   white-space: nowrap;
 }
 
+/* タブ */
+.history-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.history-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.history-tab.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.history-tab:hover:not(.active) {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.history-tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.history-tab-content.hidden {
+  display: none;
+}
+
+/* 保存ボタン */
+.history-save-btn {
+  background: rgba(100, 149, 237, 0.2);
+  color: #6495ed;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.history-save-btn:hover {
+  background: rgba(100, 149, 237, 0.4);
+}
+
+/* 保存済みリスト */
+.saved-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.saved-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.saved-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.saved-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.saved-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.saved-item-note {
+  color: #6495ed;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.saved-item-date {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 10px;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+.saved-item-delete {
+  background: none;
+  border: none;
+  color: rgba(255, 69, 58, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 0 0 8px;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.saved-item-delete:hover {
+  color: #ff453a;
+}
+
+.saved-item-entries {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.saved-item.expanded .saved-item-entries {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.saved-item-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 3px 0;
+  gap: 8px;
+}
+
+.saved-item-entry-expr {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.saved-item-entry-result {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.saved-item-count {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.saved-item-count:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* 保存モーダル */
+.save-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.save-modal-overlay.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.save-modal {
+  background: linear-gradient(135deg, #1e2a3a, #16213e);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  width: 300px;
+  max-width: 90vw;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.save-modal h3 {
+  color: #ffffff;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.save-modal-info {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.save-modal-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #ffffff;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.save-modal-input:focus {
+  border-color: #6495ed;
+}
+
+.save-modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.save-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.save-modal-btn {
+  flex: 1;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.save-modal-btn.cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.save-modal-btn.cancel:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.save-modal-btn.confirm {
+  background: linear-gradient(135deg, #6495ed, #4169e1);
+  color: #ffffff;
+}
+
+.save-modal-btn.confirm:hover {
+  background: linear-gradient(135deg, #78a5f0, #5078e4);
+}
+
+.save-modal-btn:active {
+  transform: scale(0.96);
+}
+
+.save-modal-notice {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
+  margin-top: 14px;
+}
+
+/* GitHub同期バー */
+.github-sync-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.github-sync-btn {
+  background: rgba(110, 84, 148, 0.2);
+  color: #b09cd8;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.github-sync-btn:hover {
+  background: rgba(110, 84, 148, 0.4);
+}
+
+.github-sync-btn.syncing {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.github-settings-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+  border: none;
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.github-settings-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.github-status {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 10px;
+  flex: 1;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.github-status.success {
+  color: #2ecc71;
+}
+
+.github-status.error {
+  color: #ff453a;
+}
+
+/* GitHub設定モーダル追加 */
+.github-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.github-help {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.github-help a {
+  color: #6495ed;
+  text-decoration: none;
+}
+
+.github-help a:hover {
+  text-decoration: underline;
+}
+
+.github-current-status {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  margin-top: 12px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  min-height: 20px;
+}
+
 /* レスポンシブ */
 @media (max-width: 640px) {
   .app-container {
